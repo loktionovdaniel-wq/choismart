@@ -1,5 +1,5 @@
 import "./index.css";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type KeyboardEvent } from "react";
 
 type Tool = {
   name: string;
@@ -15,43 +15,65 @@ type Tool = {
   keywords: string[];
 };
 
-const categories = [
+type Category = {
+  icon: string;
+  title: string;
+  description: string;
+  target: string;
+  search: string;
+};
+
+const categories: Category[] = [
   {
     icon: "✍️",
     title: "Writing",
     description: "Articles, blogs & AI writing",
     target: "Writesonic",
+    search: "writing",
   },
   {
     icon: "📣",
     title: "Marketing",
     description: "Marketing, SEO & sales",
     target: "Copy.ai",
+    search: "marketing",
   },
   {
     icon: "🎬",
     title: "Video",
     description: "Create & edit videos with AI",
     target: "HeyGen",
+    search: "video",
   },
   {
     icon: "🎙️",
     title: "Voice",
     description: "Voice, audio & speech",
     target: "ElevenLabs",
+    search: "voice",
   },
   {
     icon: "🔎",
     title: "SEO",
     description: "Research, rankings & content",
     target: "Surfer",
+    search: "seo",
   },
   {
     icon: "⚡",
     title: "Productivity",
     description: "Work faster with AI",
     target: "ClickUp",
+    search: "productivity",
   },
+];
+
+const popularSearches = [
+  "writing",
+  "marketing",
+  "video",
+  "voice",
+  "seo",
 ];
 
 const tools: Tool[] = [
@@ -306,30 +328,76 @@ const tools: Tool[] = [
   },
 ];
 
+function normalizeText(text: string) {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[.,!?/\\()[\]{}:"'-]/g, " ")
+    .replace(/\s+/g, " ");
+}
+
+function getToolId(toolName: string) {
+  return `tool-${toolName
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")}`;
+}
+
 function App() {
   const [expandedTool, setExpandedTool] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
 
-  const normalizedQuery = searchQuery.trim().toLowerCase();
+  const normalizedQuery = normalizeText(searchQuery);
 
+  /*
+   * SEARCH
+   *
+   * The search checks:
+   * - tool name
+   * - category
+   * - description
+   * - long description
+   * - rating
+   * - price
+   * - badge
+   * - keywords
+   *
+   * So searches like:
+   * "video"
+   * "voice"
+   * "4.8"
+   * "paid"
+   * "youtube"
+   * "marketing"
+   * "seo"
+   * "editing"
+   * etc. can return matching tools.
+   */
   const filteredTools = useMemo(() => {
     if (!normalizedQuery) {
       return tools;
     }
 
-    return tools.filter((tool) => {
-      const searchableText = [
-        tool.name,
-        tool.category,
-        tool.description,
-        tool.longDescription,
-        ...tool.keywords,
-      ]
-        .join(" ")
-        .toLowerCase();
+    const searchWords = normalizedQuery.split(" ");
 
-      return searchableText.includes(normalizedQuery);
+    return tools.filter((tool) => {
+      const searchableText = normalizeText(
+        [
+          tool.name,
+          tool.category,
+          tool.description,
+          tool.longDescription,
+          tool.rating,
+          tool.price,
+          tool.badge ?? "",
+          tool.icon,
+          ...tool.keywords,
+        ].join(" ")
+      );
+
+      return searchWords.every((word) =>
+        searchableText.includes(word)
+      );
     });
   }, [normalizedQuery]);
 
@@ -344,9 +412,13 @@ function App() {
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
+  /*
+   * Category buttons still work separately from search.
+   * They jump directly to the selected tool.
+   */
   const goToTool = (toolName: string) => {
     const element = document.getElementById(
-      `tool-${toolName.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`
+      getToolId(toolName)
     );
 
     if (!element) return;
@@ -366,6 +438,12 @@ function App() {
     });
   };
 
+  /*
+   * REAL SEARCH
+   *
+   * Clicking Find AI filters the tools first,
+   * then scrolls to the results.
+   */
   const handleSearch = () => {
     setHasSearched(true);
     setExpandedTool(null);
@@ -379,18 +457,49 @@ function App() {
   };
 
   const handleSearchKeyDown = (
-    event: React.KeyboardEvent<HTMLInputElement>
+    event: KeyboardEvent<HTMLInputElement>
   ) => {
     if (event.key === "Enter") {
       handleSearch();
     }
   };
 
+  /*
+   * Popular searches use the exact same search system.
+   * This removes the repeated button logic.
+   */
+  const runPopularSearch = (query: string) => {
+    setSearchQuery(query);
+    setHasSearched(true);
+    setExpandedTool(null);
+
+    window.setTimeout(() => {
+      document.getElementById("search-results")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 50);
+  };
+
   const clearSearch = () => {
     setSearchQuery("");
     setHasSearched(false);
     setExpandedTool(null);
+
+    window.setTimeout(() => {
+      document.getElementById("search-results")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 50);
   };
+
+  /*
+   * When there is no search, show all tools.
+   * When there is a search, show only matching tools.
+   */
+  const showingSearchResults =
+    hasSearched && normalizedQuery.length > 0;
 
   return (
     <div className="site">
@@ -403,7 +512,8 @@ function App() {
             <span className="brand-mark">C</span>
 
             <span>
-              Choi<span className="brand-highlight">Smart</span>
+              Choi
+              <span className="brand-highlight">Smart</span>
             </span>
           </a>
 
@@ -437,8 +547,9 @@ function App() {
             </h1>
 
             <p className="hero-description">
-              Thousands of AI tools exist. ChoiSmart helps you find the right
-              ones for your work, creativity and everyday life.
+              Thousands of AI tools exist. ChoiSmart helps you find
+              the right ones for your work, creativity and everyday
+              life.
             </p>
 
             <div className="hero-search">
@@ -447,7 +558,9 @@ function App() {
               <input
                 type="text"
                 value={searchQuery}
-                onChange={(event) => setSearchQuery(event.target.value)}
+                onChange={(event) =>
+                  setSearchQuery(event.target.value)
+                }
                 onKeyDown={handleSearchKeyDown}
                 placeholder="What do you want AI to help with?"
                 aria-label="Search for an AI tool"
@@ -464,7 +577,10 @@ function App() {
                 </button>
               )}
 
-              <button type="button" onClick={handleSearch}>
+              <button
+                type="button"
+                onClick={handleSearch}
+              >
                 Find AI
                 <span>→</span>
               </button>
@@ -473,75 +589,16 @@ function App() {
             <div className="popular-searches">
               <span>Popular:</span>
 
-              <button
-                type="button"
-                onClick={() => {
-                  setSearchQuery("writing");
-                  setHasSearched(true);
-                  window.setTimeout(
-                    () => scrollToSection("search-results"),
-                    50
-                  );
-                }}
-              >
-                Writing
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setSearchQuery("marketing");
-                  setHasSearched(true);
-                  window.setTimeout(
-                    () => scrollToSection("search-results"),
-                    50
-                  );
-                }}
-              >
-                Marketing
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setSearchQuery("video");
-                  setHasSearched(true);
-                  window.setTimeout(
-                    () => scrollToSection("search-results"),
-                    50
-                  );
-                }}
-              >
-                Video
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setSearchQuery("voice");
-                  setHasSearched(true);
-                  window.setTimeout(
-                    () => scrollToSection("search-results"),
-                    50
-                  );
-                }}
-              >
-                Voice
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setSearchQuery("seo");
-                  setHasSearched(true);
-                  window.setTimeout(
-                    () => scrollToSection("search-results"),
-                    50
-                  );
-                }}
-              >
-                SEO
-              </button>
+              {popularSearches.map((search) => (
+                <button
+                  key={search}
+                  type="button"
+                  onClick={() => runPopularSearch(search)}
+                >
+                  {search.charAt(0).toUpperCase() +
+                    search.slice(1)}
+                </button>
+              ))}
             </div>
           </div>
 
@@ -572,13 +629,16 @@ function App() {
         <section className="section" id="categories">
           <div className="section-header">
             <div>
-              <span className="section-kicker">EXPLORE</span>
+              <span className="section-kicker">
+                EXPLORE
+              </span>
 
               <h2>What do you need AI for?</h2>
             </div>
 
             <p>
-              Pick a category and discover AI tools built for the job.
+              Pick a category and discover AI tools built for
+              the job.
             </p>
           </div>
 
@@ -615,36 +675,43 @@ function App() {
           <div className="section-header">
             <div>
               <span className="section-kicker">
-                {hasSearched ? "SEARCH RESULTS" : "EDITOR'S PICKS"}
+                {showingSearchResults
+                  ? "SEARCH RESULTS"
+                  : "EDITOR'S PICKS"}
               </span>
 
               <h2>
-                {hasSearched && normalizedQuery
+                {showingSearchResults
                   ? `Results for "${searchQuery.trim()}"`
                   : "AI tools worth knowing"}
               </h2>
             </div>
 
             <span className="text-link">
-              {hasSearched
+              {showingSearchResults
                 ? `${filteredTools.length} ${
-                    filteredTools.length === 1 ? "tool" : "tools"
+                    filteredTools.length === 1
+                      ? "tool"
+                      : "tools"
                   } found`
                 : "10 curated tools"}
             </span>
           </div>
 
-          {hasSearched && normalizedQuery && filteredTools.length === 0 ? (
+          {/* NOTHING FOUND */}
+
+          {showingSearchResults &&
+          filteredTools.length === 0 ? (
             <div className="no-results">
               <div className="no-results-icon">⌕</div>
 
               <h3>No AI tools found</h3>
 
               <p>
-                We couldn't find a tool matching "
-                <strong>{searchQuery.trim()}</strong>".
-                Try a different search such as writing, video, voice,
-                marketing or SEO.
+                We couldn't find a tool matching{" "}
+                <strong>"{searchQuery.trim()}"</strong>.
+                Try writing, video, voice, marketing, SEO or
+                productivity.
               </p>
 
               <button
@@ -659,11 +726,9 @@ function App() {
           ) : (
             <div className="tools-grid">
               {filteredTools.map((tool) => {
-                const toolId = `tool-${tool.name
-                  .toLowerCase()
-                  .replace(/[^a-z0-9]+/g, "-")}`;
-
-                const isExpanded = expandedTool === tool.name;
+                const toolId = getToolId(tool.name);
+                const isExpanded =
+                  expandedTool === tool.name;
 
                 return (
                   <article
@@ -673,7 +738,9 @@ function App() {
                     key={tool.name}
                     id={toolId}
                   >
-                    <div className={`tool-logo ${tool.accent}`}>
+                    <div
+                      className={`tool-logo ${tool.accent}`}
+                    >
                       {tool.icon}
                     </div>
 
@@ -751,7 +818,6 @@ function App() {
                         }
                       >
                         Try {tool.name}
-
                         <span>→</span>
                       </button>
                     </div>
@@ -784,14 +850,19 @@ function App() {
             <button
               type="button"
               className="finder-button"
-              onClick={() => scrollToSection("categories")}
+              onClick={() =>
+                scrollToSection("categories")
+              }
             >
               Explore AI tools
               <span>→</span>
             </button>
           </div>
 
-          <div className="finder-decoration" aria-hidden="true">
+          <div
+            className="finder-decoration"
+            aria-hidden="true"
+          >
             <div className="finder-orb">
               <span>✦</span>
             </div>
@@ -888,10 +959,8 @@ function App() {
 
           <div className="footer-links">
             <a href="#explore">Explore AI</a>
-
             <a href="#categories">Categories</a>
-
-            <a href="#popular">AI Tools</a>
+            <a href="#search-results">AI Tools</a>
           </div>
         </div>
 
