@@ -1011,3 +1011,82 @@ a {
     gap: 8px;
   }
 }
+/* ---------- Learn More ---------- */
+
+.tool-card.expanded {
+  min-height: auto;
+}
+
+.learn-more-button {
+  margin-top: 16px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 0;
+  background: transparent;
+  color: #6157e8;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.learn-more-button:hover {
+  color: #5148d5;
+}
+
+.learn-more-button span {
+  font-size: 14px;
+}
+
+.tool-long-description {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid #eeeef1;
+  animation: expandTool 0.25s ease;
+}
+
+.tool-long-description p {
+  margin: 0 0 14px;
+  color: #6f737d;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.tool-long-description p:last-child {
+  margin-bottom: 0;
+}
+
+@keyframes expandTool {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- Category Buttons ---------- */
+
+.category-card {
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* ---------- Expanded Mobile Cards ---------- */
+
+@media (max-width: 650px) {
+  .tool-long-description p {
+    font-size: 12px;
+    line-height: 1.65;
+  }
+
+  .learn-more-button {
+    font-size: 11px;
+  }
+}
