@@ -1090,3 +1090,211 @@ a {
     font-size: 11px;
   }
 }
+/* =========================================
+   LEARN / READ MORE BUTTON
+   ========================================= */
+
+.learn-more-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  margin-top: 18px;
+  padding: 9px 14px;
+
+  border: 1px solid rgba(91, 76, 210, 0.18);
+  border-radius: 999px;
+
+  background: rgba(91, 76, 210, 0.06);
+  color: #5b4cd2;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.learn-more-button:hover {
+  background: rgba(91, 76, 210, 0.11);
+  border-color: rgba(91, 76, 210, 0.3);
+
+  transform: translateY(-1px);
+
+  box-shadow: 0 6px 18px rgba(91, 76, 210, 0.08);
+}
+
+.learn-more-button.is-open {
+  background: rgba(91, 76, 210, 0.1);
+}
+
+.learn-more-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 22px;
+  height: 22px;
+
+  border-radius: 50%;
+
+  background: rgba(91, 76, 210, 0.1);
+
+  font-size: 12px;
+
+  transition: transform 0.2s ease;
+}
+
+.learn-more-button:hover .learn-more-arrow {
+  transform: translateY(2px);
+}
+
+
+/* =========================================
+   FINDER DECORATION
+   IMPORTANT: keep decoration away from text
+   ========================================= */
+
+.finder-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.finder-content {
+  position: relative;
+  z-index: 5;
+
+  max-width: 650px;
+}
+
+.finder-decoration {
+  position: absolute;
+  right: 30px;
+  bottom: 40px;
+
+  width: 330px;
+  height: 330px;
+
+  pointer-events: none;
+  z-index: 1;
+}
+
+.finder-orb {
+  position: absolute;
+
+  right: 75px;
+  bottom: 45px;
+
+  width: 200px;
+  height: 200px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(104, 86, 225, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+
+  box-shadow:
+    0 0 80px rgba(104, 86, 225, 0.25),
+    inset 0 0 40px rgba(255, 255, 255, 0.04);
+}
+
+.finder-orb span {
+  font-size: 42px;
+  color: white;
+}
+
+.floating-card {
+  position: absolute;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 13px 16px;
+
+  border-radius: 14px;
+
+  background: rgba(45, 43, 75, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  color: rgba(255, 255, 255, 0.85);
+
+  font-size: 12px;
+  font-weight: 500;
+
+  white-space: nowrap;
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.floating-card strong {
+  color: white;
+  font-weight: 700;
+}
+
+.card-one {
+  top: 15px;
+  left: 5px;
+}
+
+.card-two {
+  right: 0;
+  bottom: 0;
+}
+
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (max-width: 700px) {
+  .finder-decoration {
+    right: -55px;
+    bottom: 15px;
+
+    width: 280px;
+    height: 280px;
+
+    opacity: 0.8;
+  }
+
+  .finder-orb {
+    right: 45px;
+    bottom: 35px;
+
+    width: 165px;
+    height: 165px;
+  }
+
+  .floating-card {
+    font-size: 10px;
+    padding: 10px 12px;
+  }
+
+  .card-one {
+    top: 10px;
+    left: -10px;
+  }
+
+  .card-two {
+    right: -10px;
+    bottom: 0;
+  }
+
+  .finder-content {
+    position: relative;
+    z-index: 10;
+  }
+}
