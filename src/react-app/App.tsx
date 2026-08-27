@@ -217,6 +217,11 @@ function App() {
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
+  /*
+    IMPORTANT:
+    Category buttons ONLY scroll to the correct AI tool.
+    They do NOT automatically open the long description.
+  */
   const goToTool = (toolName: string) => {
     const element = document.getElementById(
       `tool-${toolName.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`
@@ -224,14 +229,21 @@ function App() {
 
     if (!element) return;
 
+    // Close any previously opened tool
+    setExpandedTool(null);
+
+    // Scroll directly to the correct tool
     element.scrollIntoView({
       behavior: "smooth",
       block: "center",
     });
+  };
 
-    setTimeout(() => {
-      setExpandedTool(toolName);
-    }, 400);
+  const scrollToSection = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
   };
 
   return (
@@ -241,7 +253,7 @@ function App() {
 
       <header className="navbar">
         <div className="nav-inner">
-          <a className="brand" href="#">
+          <a className="brand" href="#explore">
             <span className="brand-mark">C</span>
 
             <span>
@@ -263,6 +275,8 @@ function App() {
       </header>
 
       <main>
+        {/* HERO */}
+
         <section className="hero" id="explore">
           <div className="hero-content">
             <div className="eyebrow">
@@ -290,13 +304,7 @@ function App() {
                 aria-label="Search for an AI tool"
               />
 
-              <button
-                onClick={() =>
-                  document
-                    .getElementById("popular")
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
-              >
+              <button onClick={() => scrollToSection("popular")}>
                 Find AI
                 <span>→</span>
               </button>
@@ -304,11 +312,26 @@ function App() {
 
             <div className="popular-searches">
               <span>Popular:</span>
-              <a href="#popular">Writing</a>
-              <a href="#popular">Marketing</a>
-              <a href="#popular">Video</a>
-              <a href="#popular">Voice</a>
-              <a href="#popular">SEO</a>
+
+              <button onClick={() => goToTool("Writesonic")}>
+                Writing
+              </button>
+
+              <button onClick={() => goToTool("Copy.ai")}>
+                Marketing
+              </button>
+
+              <button onClick={() => goToTool("HeyGen")}>
+                Video
+              </button>
+
+              <button onClick={() => goToTool("ElevenLabs")}>
+                Voice
+              </button>
+
+              <button onClick={() => goToTool("Surfer")}>
+                SEO
+              </button>
             </div>
           </div>
 
@@ -334,6 +357,8 @@ function App() {
           </div>
         </section>
 
+        {/* CATEGORIES */}
+
         <section className="section" id="categories">
           <div className="section-header">
             <div>
@@ -350,11 +375,14 @@ function App() {
           <div className="category-grid">
             {categories.map((category) => (
               <button
+                type="button"
                 className="category-card"
                 key={category.title}
                 onClick={() => goToTool(category.target)}
               >
-                <div className="category-icon">{category.icon}</div>
+                <div className="category-icon">
+                  {category.icon}
+                </div>
 
                 <div className="category-copy">
                   <h3>{category.title}</h3>
@@ -368,15 +396,21 @@ function App() {
           </div>
         </section>
 
+        {/* AI TOOLS */}
+
         <section className="section tools-section" id="popular">
           <div className="section-header">
             <div>
-              <span className="section-kicker">EDITOR'S PICKS</span>
+              <span className="section-kicker">
+                EDITOR'S PICKS
+              </span>
 
               <h2>AI tools worth knowing</h2>
             </div>
 
-            <span className="text-link">10 curated tools</span>
+            <span className="text-link">
+              10 curated tools
+            </span>
           </div>
 
           <div className="tools-grid">
@@ -385,7 +419,8 @@ function App() {
                 .toLowerCase()
                 .replace(/[^a-z0-9]+/g, "-")}`;
 
-              const isExpanded = expandedTool === tool.name;
+              const isExpanded =
+                expandedTool === tool.name;
 
               return (
                 <article
@@ -420,20 +455,32 @@ function App() {
 
                     <p>{tool.description}</p>
 
+                    {/* BEAUTIFUL READ MORE BUTTON */}
+
                     <button
-                      className="learn-more-button"
+                      type="button"
+                      className={`learn-more-button ${
+                        isExpanded ? "is-open" : ""
+                      }`}
                       onClick={() =>
                         setExpandedTool(
                           isExpanded ? null : tool.name
                         )
                       }
+                      aria-expanded={isExpanded}
                     >
-                      {isExpanded ? "Show less" : "Learn more"}
-
                       <span>
+                        {isExpanded
+                          ? "Show less"
+                          : "Read more"}
+                      </span>
+
+                      <span className="learn-more-arrow">
                         {isExpanded ? "↑" : "↓"}
                       </span>
                     </button>
+
+                    {/* LONG DESCRIPTION */}
 
                     {isExpanded && (
                       <div className="tool-long-description">
@@ -458,6 +505,7 @@ function App() {
                     </div>
 
                     <button
+                      type="button"
                       className="tool-button"
                       onClick={() =>
                         openTool(tool.affiliateUrl)
@@ -473,6 +521,8 @@ function App() {
             })}
           </div>
         </section>
+
+        {/* FINDER */}
 
         <section className="finder-section">
           <div className="finder-content">
@@ -492,38 +542,36 @@ function App() {
             </p>
 
             <button
+              type="button"
               className="finder-button"
-              onClick={() =>
-                document
-                  .getElementById("popular")
-                  ?.scrollIntoView({
-                    behavior: "smooth",
-                  })
-              }
+              onClick={() => scrollToSection("categories")}
             >
               Explore AI tools
               <span>→</span>
             </button>
           </div>
 
-          <div className="finder-decoration">
+          {/* DECORATION */}
+          <div className="finder-decoration" aria-hidden="true">
+            <div className="finder-orb">
+              <span>✦</span>
+            </div>
+
             <div className="floating-card card-one">
               <span>✍️</span>
-              Writing
+              <span>Writing</span>
               <strong>Top tools</strong>
             </div>
 
             <div className="floating-card card-two">
               <span>🎬</span>
-              Video
+              <span>Video</span>
               <strong>Top tools</strong>
-            </div>
-
-            <div className="finder-orb">
-              <span>✦</span>
             </div>
           </div>
         </section>
+
+        {/* WHY CHOISMART */}
 
         <section className="section why-section">
           <div className="section-header centered">
@@ -575,14 +623,20 @@ function App() {
         </section>
       </main>
 
+      {/* FOOTER */}
+
       <footer className="footer">
         <div className="footer-inner">
           <div>
-            <a className="brand footer-brand" href="#">
+            <a
+              className="brand footer-brand"
+              href="#explore"
+            >
               <span className="brand-mark">C</span>
 
               <span>
-                Choi<span className="brand-highlight">
+                Choi
+                <span className="brand-highlight">
                   Smart
                 </span>
               </span>
