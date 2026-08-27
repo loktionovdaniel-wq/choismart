@@ -393,11 +393,16 @@ a {
   display: flex;
   align-items: center;
   gap: 16px;
+  width: 100%;
   min-height: 120px;
   padding: 22px;
   border: 1px solid var(--border);
   border-radius: 18px;
+  color: inherit;
   background: rgba(255, 255, 255, 0.8);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
   transition: transform 0.22s ease, border-color 0.22s ease,
     box-shadow 0.22s ease;
 }
@@ -476,6 +481,10 @@ a {
   transform: translateY(-5px);
   border-color: #ddd9ff;
   box-shadow: 0 20px 45px rgba(25, 25, 35, 0.09);
+}
+
+.tool-card.expanded {
+  min-height: auto;
 }
 
 .tool-logo {
@@ -580,6 +589,87 @@ a {
   line-height: 1.55;
 }
 
+/* =========================
+   LEARN MORE
+========================= */
+
+.learn-more-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 9px 14px;
+  border: 1px solid rgba(91, 76, 210, 0.18);
+  border-radius: 999px;
+  background: rgba(91, 76, 210, 0.06);
+  color: #5b4cd2;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.learn-more-button:hover {
+  background: rgba(91, 76, 210, 0.11);
+  border-color: rgba(91, 76, 210, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(91, 76, 210, 0.08);
+}
+
+.learn-more-button.is-open {
+  background: rgba(91, 76, 210, 0.1);
+}
+
+.learn-more-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(91, 76, 210, 0.1);
+  font-size: 12px;
+  transition: transform 0.2s ease;
+}
+
+.learn-more-button:hover .learn-more-arrow {
+  transform: translateY(2px);
+}
+
+.tool-long-description {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid #eeeef1;
+  animation: expandTool 0.25s ease;
+}
+
+.tool-long-description p {
+  margin: 0 0 14px;
+  color: #6f737d;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.tool-long-description p:last-child {
+  margin-bottom: 0;
+}
+
+@keyframes expandTool {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .tool-bottom {
   display: flex;
   align-items: flex-end;
@@ -661,8 +751,8 @@ a {
 
 .finder-content {
   position: relative;
-  z-index: 2;
-  max-width: 600px;
+  z-index: 5;
+  max-width: 650px;
 }
 
 .section-kicker.light {
@@ -703,40 +793,53 @@ a {
 }
 
 .finder-decoration {
-  position: relative;
-  z-index: 2;
-  width: 370px;
-  height: 280px;
+  position: absolute;
+  right: 30px;
+  bottom: 40px;
+  z-index: 1;
+  width: 330px;
+  height: 330px;
+  pointer-events: none;
 }
 
 .finder-orb {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  display: grid;
-  place-items: center;
-  width: 150px;
-  height: 150px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  right: 75px;
+  bottom: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 200px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 50%;
-  background: rgba(110, 95, 255, 0.28);
-  box-shadow: 0 0 90px rgba(106, 91, 255, 0.4);
-  font-size: 50px;
-  transform: translate(-50%, -50%);
+  background: rgba(104, 86, 225, 0.22);
+  box-shadow:
+    0 0 80px rgba(104, 86, 225, 0.25),
+    inset 0 0 40px rgba(255, 255, 255, 0.04);
+}
+
+.finder-orb span {
+  color: white;
+  font-size: 42px;
 }
 
 .floating-card {
   position: absolute;
   display: flex;
   align-items: center;
-  gap: 9px;
-  padding: 12px 14px;
+  gap: 8px;
+  padding: 13px 16px;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 12px;
-  color: #dddde2;
-  background: rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(45, 43, 75, 0.72);
   backdrop-filter: blur(12px);
-  font-size: 11px;
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
 }
 
 .floating-card span {
@@ -745,16 +848,17 @@ a {
 
 .floating-card strong {
   color: white;
+  font-weight: 700;
 }
 
 .card-one {
-  top: 20px;
-  left: 15px;
+  top: 15px;
+  left: 5px;
 }
 
 .card-two {
-  right: 10px;
-  bottom: 20px;
+  right: 0;
+  bottom: 0;
 }
 
 /* =========================
@@ -874,7 +978,7 @@ a {
 }
 
 /* =========================
-   RESPONSIVE
+   TABLET
 ========================= */
 
 @media (max-width: 900px) {
@@ -894,6 +998,47 @@ a {
   .finder-decoration {
     width: 290px;
     transform: scale(0.85);
+  }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+  .finder-decoration {
+    right: -55px;
+    bottom: 15px;
+    width: 280px;
+    height: 280px;
+    opacity: 0.8;
+  }
+
+  .finder-orb {
+    right: 45px;
+    bottom: 35px;
+    width: 165px;
+    height: 165px;
+  }
+
+  .floating-card {
+    padding: 10px 12px;
+    font-size: 10px;
+  }
+
+  .card-one {
+    top: 10px;
+    left: -10px;
+  }
+
+  .card-two {
+    right: -10px;
+    bottom: 0;
+  }
+
+  .finder-content {
+    position: relative;
+    z-index: 10;
   }
 }
 
@@ -937,6 +1082,10 @@ a {
     justify-content: center;
   }
 
+  .popular-searches {
+    gap: 12px;
+  }
+
   .hero-trust {
     gap: 17px;
     margin-top: 50px;
@@ -975,18 +1124,6 @@ a {
     border-radius: 24px;
   }
 
-  .finder-decoration {
-    position: absolute;
-    right: -20px;
-    bottom: -15px;
-    opacity: 0.8;
-    transform: scale(0.72);
-  }
-
-  .finder-content {
-    align-self: flex-start;
-  }
-
   .finder-content h2 {
     font-size: 42px;
     letter-spacing: -2px;
@@ -1010,77 +1147,7 @@ a {
     flex-direction: column;
     gap: 8px;
   }
-}
-/* ---------- Learn More ---------- */
 
-.tool-card.expanded {
-  min-height: auto;
-}
-
-.learn-more-button {
-  margin-top: 16px;
-  padding: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  border: 0;
-  background: transparent;
-  color: #6157e8;
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.learn-more-button:hover {
-  color: #5148d5;
-}
-
-.learn-more-button span {
-  font-size: 14px;
-}
-
-.tool-long-description {
-  margin-top: 18px;
-  padding-top: 18px;
-  border-top: 1px solid #eeeef1;
-  animation: expandTool 0.25s ease;
-}
-
-.tool-long-description p {
-  margin: 0 0 14px;
-  color: #6f737d;
-  font-size: 13px;
-  line-height: 1.7;
-}
-
-.tool-long-description p:last-child {
-  margin-bottom: 0;
-}
-
-@keyframes expandTool {
-  from {
-    opacity: 0;
-    transform: translateY(-5px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ---------- Category Buttons ---------- */
-
-.category-card {
-  width: 100%;
-  text-align: left;
-  font: inherit;
-  color: inherit;
-  cursor: pointer;
-}
-
-/* ---------- Expanded Mobile Cards ---------- */
-
-@media (max-width: 650px) {
   .tool-long-description p {
     font-size: 12px;
     line-height: 1.65;
@@ -1088,213 +1155,5 @@ a {
 
   .learn-more-button {
     font-size: 11px;
-  }
-}
-/* =========================================
-   LEARN / READ MORE BUTTON
-   ========================================= */
-
-.learn-more-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-
-  margin-top: 18px;
-  padding: 9px 14px;
-
-  border: 1px solid rgba(91, 76, 210, 0.18);
-  border-radius: 999px;
-
-  background: rgba(91, 76, 210, 0.06);
-  color: #5b4cd2;
-
-  font-size: 13px;
-  font-weight: 700;
-
-  cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.learn-more-button:hover {
-  background: rgba(91, 76, 210, 0.11);
-  border-color: rgba(91, 76, 210, 0.3);
-
-  transform: translateY(-1px);
-
-  box-shadow: 0 6px 18px rgba(91, 76, 210, 0.08);
-}
-
-.learn-more-button.is-open {
-  background: rgba(91, 76, 210, 0.1);
-}
-
-.learn-more-arrow {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 22px;
-  height: 22px;
-
-  border-radius: 50%;
-
-  background: rgba(91, 76, 210, 0.1);
-
-  font-size: 12px;
-
-  transition: transform 0.2s ease;
-}
-
-.learn-more-button:hover .learn-more-arrow {
-  transform: translateY(2px);
-}
-
-
-/* =========================================
-   FINDER DECORATION
-   IMPORTANT: keep decoration away from text
-   ========================================= */
-
-.finder-section {
-  position: relative;
-  overflow: hidden;
-}
-
-.finder-content {
-  position: relative;
-  z-index: 5;
-
-  max-width: 650px;
-}
-
-.finder-decoration {
-  position: absolute;
-  right: 30px;
-  bottom: 40px;
-
-  width: 330px;
-  height: 330px;
-
-  pointer-events: none;
-  z-index: 1;
-}
-
-.finder-orb {
-  position: absolute;
-
-  right: 75px;
-  bottom: 45px;
-
-  width: 200px;
-  height: 200px;
-
-  border-radius: 50%;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background: rgba(104, 86, 225, 0.22);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-
-  box-shadow:
-    0 0 80px rgba(104, 86, 225, 0.25),
-    inset 0 0 40px rgba(255, 255, 255, 0.04);
-}
-
-.finder-orb span {
-  font-size: 42px;
-  color: white;
-}
-
-.floating-card {
-  position: absolute;
-
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  padding: 13px 16px;
-
-  border-radius: 14px;
-
-  background: rgba(45, 43, 75, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-
-  color: rgba(255, 255, 255, 0.85);
-
-  font-size: 12px;
-  font-weight: 500;
-
-  white-space: nowrap;
-
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-}
-
-.floating-card strong {
-  color: white;
-  font-weight: 700;
-}
-
-.card-one {
-  top: 15px;
-  left: 5px;
-}
-
-.card-two {
-  right: 0;
-  bottom: 0;
-}
-
-
-/* =========================================
-   MOBILE
-   ========================================= */
-
-@media (max-width: 700px) {
-  .finder-decoration {
-    right: -55px;
-    bottom: 15px;
-
-    width: 280px;
-    height: 280px;
-
-    opacity: 0.8;
-  }
-
-  .finder-orb {
-    right: 45px;
-    bottom: 35px;
-
-    width: 165px;
-    height: 165px;
-  }
-
-  .floating-card {
-    font-size: 10px;
-    padding: 10px 12px;
-  }
-
-  .card-one {
-    top: 10px;
-    left: -10px;
-  }
-
-  .card-two {
-    right: -10px;
-    bottom: 0;
-  }
-
-  .finder-content {
-    position: relative;
-    z-index: 10;
   }
 }
