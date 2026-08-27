@@ -4,6 +4,7 @@ type Tool = {
   name: string;
   category: string;
   description: string;
+  why: string;
   rating: string;
   price: string;
   icon: string;
@@ -51,6 +52,8 @@ const tools: Tool[] = [
     category: "Marketing AI",
     description:
       "AI marketing platform for creating campaigns, content and on-brand messaging.",
+    why:
+      "Great for businesses and marketers who need to create a lot of professional marketing content quickly.",
     rating: "4.8",
     price: "Paid",
     icon: "J",
@@ -63,6 +66,8 @@ const tools: Tool[] = [
     category: "Marketing AI",
     description:
       "AI-powered workflows for marketing, sales and content creation.",
+    why:
+      "Useful when you want to automate repetitive marketing and sales tasks instead of doing everything manually.",
     rating: "4.7",
     price: "Free / Paid",
     icon: "C",
@@ -75,6 +80,8 @@ const tools: Tool[] = [
     category: "Writing & SEO",
     description:
       "Create articles, marketing copy and SEO content with AI.",
+    why:
+      "A strong choice for bloggers, businesses and creators who want to produce SEO-friendly content faster.",
     rating: "4.7",
     price: "Free / Paid",
     icon: "W",
@@ -87,6 +94,8 @@ const tools: Tool[] = [
     category: "SEO AI",
     description:
       "AI-powered SEO platform for planning, writing and optimizing content.",
+    why:
+      "Helps website owners understand what Google expects and improve their chances of ranking higher.",
     rating: "4.8",
     price: "Paid",
     icon: "S",
@@ -99,6 +108,8 @@ const tools: Tool[] = [
     category: "Voice AI",
     description:
       "Create realistic AI voices, narration and audio content in many languages.",
+    why:
+      "Perfect for YouTube, TikTok, podcasts and businesses that need realistic voiceovers without hiring a voice actor.",
     rating: "4.9",
     price: "Free / Paid",
     icon: "11",
@@ -111,6 +122,8 @@ const tools: Tool[] = [
     category: "Video AI",
     description:
       "Create AI videos, avatars and presentations without traditional filming.",
+    why:
+      "Lets you create professional-looking presenter videos without cameras, actors or a complicated production setup.",
     rating: "4.8",
     price: "Free / Paid",
     icon: "H",
@@ -123,6 +136,8 @@ const tools: Tool[] = [
     category: "Video AI",
     description:
       "Turn scripts, articles and ideas into engaging videos with AI.",
+    why:
+      "Useful for creators who want to turn written content into videos quickly without learning complicated editing software.",
     rating: "4.6",
     price: "Paid",
     icon: "P",
@@ -134,6 +149,8 @@ const tools: Tool[] = [
     category: "Video & Audio",
     description:
       "Edit video and audio almost like editing a document, with powerful AI tools.",
+    why:
+      "Makes editing podcasts, interviews and YouTube videos much easier by letting you edit through the transcript.",
     rating: "4.7",
     price: "Free / Paid",
     icon: "D",
@@ -146,6 +163,8 @@ const tools: Tool[] = [
     category: "Voice AI",
     description:
       "Create professional AI voiceovers for videos, presentations and business content.",
+    why:
+      "Great for presentations, training videos and ads when you need a professional voice without recording it yourself.",
     rating: "4.7",
     price: "Free / Paid",
     icon: "M",
@@ -157,6 +176,8 @@ const tools: Tool[] = [
     category: "Productivity AI",
     description:
       "AI-powered productivity platform for managing projects, tasks and work.",
+    why:
+      "Helps teams and individuals organize projects, manage tasks and save time on everyday work.",
     rating: "4.8",
     price: "Free / Paid",
     icon: "✓",
@@ -178,6 +199,12 @@ function App() {
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
+  const scrollToPopular = () => {
+    document
+      .getElementById("popular")
+      ?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <div className="site">
       <div className="background-glow glow-one" />
@@ -187,6 +214,7 @@ function App() {
         <div className="nav-inner">
           <a className="brand" href="#">
             <span className="brand-mark">C</span>
+
             <span>
               Choi<span className="brand-highlight">Smart</span>
             </span>
@@ -206,6 +234,7 @@ function App() {
       </header>
 
       <main>
+        {/* HERO */}
         <section className="hero" id="explore">
           <div className="hero-content">
             <div className="eyebrow">
@@ -233,13 +262,7 @@ function App() {
                 aria-label="Search for an AI tool"
               />
 
-              <button
-                onClick={() =>
-                  document
-                    .getElementById("popular")
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
-              >
+              <button onClick={scrollToPopular}>
                 Find AI
                 <span>→</span>
               </button>
@@ -277,10 +300,12 @@ function App() {
           </div>
         </section>
 
+        {/* CATEGORIES */}
         <section className="section" id="categories">
           <div className="section-header">
             <div>
               <span className="section-kicker">EXPLORE</span>
+
               <h2>What do you need AI for?</h2>
             </div>
 
@@ -300,6 +325,7 @@ function App() {
 
                 <div className="category-copy">
                   <h3>{category.title}</h3>
+
                   <p>{category.description}</p>
                 </div>
 
@@ -309,16 +335,16 @@ function App() {
           </div>
         </section>
 
+        {/* TOOLS */}
         <section className="section tools-section" id="popular">
           <div className="section-header">
             <div>
               <span className="section-kicker">EDITOR'S PICKS</span>
+
               <h2>AI tools worth knowing</h2>
             </div>
 
-            <span className="text-link">
-              10 curated tools
-            </span>
+            <span className="text-link">10 curated tools</span>
           </div>
 
           <div className="tools-grid">
@@ -333,9 +359,7 @@ function App() {
                     <span className="tool-badge">{tool.badge}</span>
                   )}
 
-                  <span className="rating">
-                    ★ {tool.rating}
-                  </span>
+                  <span className="rating">★ {tool.rating}</span>
                 </div>
 
                 <div className="tool-info">
@@ -346,11 +370,16 @@ function App() {
                   <h3>{tool.name}</h3>
 
                   <p>{tool.description}</p>
+
+                  <p>
+                    <strong>Why use it?</strong> {tool.why}
+                  </p>
                 </div>
 
                 <div className="tool-bottom">
                   <div>
                     <span className="small-label">PRICE</span>
+
                     <strong>{tool.price}</strong>
                   </div>
 
@@ -358,7 +387,8 @@ function App() {
                     className="tool-button"
                     onClick={() => openTool(tool.affiliateUrl)}
                   >
-                    Explore <span>→</span>
+                    Explore
+                    <span>→</span>
                   </button>
                 </div>
               </article>
@@ -366,11 +396,10 @@ function App() {
           </div>
         </section>
 
+        {/* FINDER */}
         <section className="finder-section">
           <div className="finder-content">
-            <span className="section-kicker light">
-              NOT SURE?
-            </span>
+            <span className="section-kicker light">NOT SURE?</span>
 
             <h2>
               Tell us what you need.
@@ -383,14 +412,7 @@ function App() {
               the best tool for your specific goal.
             </p>
 
-            <button
-              className="finder-button"
-              onClick={() =>
-                document
-                  .getElementById("popular")
-                  ?.scrollIntoView({ behavior: "smooth" })
-              }
-            >
+            <button className="finder-button" onClick={scrollToPopular}>
               Explore AI tools
               <span>→</span>
             </button>
@@ -415,17 +437,14 @@ function App() {
           </div>
         </section>
 
+        {/* WHY CHOISMART */}
         <section className="section why-section">
           <div className="section-header centered">
-            <span className="section-kicker">
-              WHY CHOISMART
-            </span>
+            <span className="section-kicker">WHY CHOISMART</span>
 
             <h2>AI is complicated enough.</h2>
 
-            <p>
-              We make choosing a tool feel simple.
-            </p>
+            <p>We make choosing a tool feel simple.</p>
           </div>
 
           <div className="why-grid">
@@ -464,6 +483,7 @@ function App() {
         </section>
       </main>
 
+      {/* FOOTER */}
       <footer className="footer">
         <div className="footer-inner">
           <div>
@@ -490,9 +510,7 @@ function App() {
         <div className="footer-bottom">
           <span>© 2026 ChoiSmart</span>
 
-          <span>
-            Some links may be affiliate links.
-          </span>
+          <span>Some links may be affiliate links.</span>
         </div>
       </footer>
     </div>
