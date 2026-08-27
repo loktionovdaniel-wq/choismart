@@ -1314,3 +1314,34 @@ a {
     font-size: 13px;
   }
 }
+/* FIX: search clear button */
+.hero-search .search-clear {
+  width: 40px !important;
+  min-width: 40px !important;
+  height: 40px !important;
+
+  padding: 0 !important;
+  margin: 0 !important;
+
+  border: none !important;
+  border-radius: 50% !important;
+
+  background: transparent !important;
+  color: #777 !important;
+
+  font-size: 24px !important;
+  font-weight: 500 !important;
+  line-height: 1 !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  cursor: pointer;
+  flex-shrink: 0 !important;
+}
+
+.hero-search .search-clear:hover {
+  background: rgba(0, 0, 0, 0.06) !important;
+  color: #111 !important;
+}
