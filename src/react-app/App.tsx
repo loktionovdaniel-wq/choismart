@@ -1,5 +1,5 @@
 import "./index.css";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 type Tool = {
   name: string;
@@ -12,6 +12,7 @@ type Tool = {
   accent: string;
   badge?: string;
   affiliateUrl: string;
+  keywords: string[];
 };
 
 const categories = [
@@ -67,6 +68,17 @@ const tools: Tool[] = [
     accent: "violet",
     badge: "Editor's Pick",
     affiliateUrl: "YOUR_JASPER_AFFILIATE_LINK",
+    keywords: [
+      "jasper",
+      "marketing",
+      "marketing ai",
+      "advertising",
+      "ads",
+      "email",
+      "social media",
+      "content",
+      "copywriting",
+    ],
   },
 
   {
@@ -82,6 +94,16 @@ const tools: Tool[] = [
     accent: "blue",
     badge: "Popular",
     affiliateUrl: "YOUR_COPY_AI_AFFILIATE_LINK",
+    keywords: [
+      "copy ai",
+      "copy.ai",
+      "marketing",
+      "sales",
+      "business",
+      "outreach",
+      "workflow",
+      "content",
+    ],
   },
 
   {
@@ -97,6 +119,17 @@ const tools: Tool[] = [
     accent: "orange",
     badge: "Best for Writing",
     affiliateUrl: "YOUR_WRITESONIC_AFFILIATE_LINK",
+    keywords: [
+      "writesonic",
+      "writing",
+      "writer",
+      "articles",
+      "article",
+      "blog",
+      "blogging",
+      "content",
+      "seo",
+    ],
   },
 
   {
@@ -112,6 +145,16 @@ const tools: Tool[] = [
     accent: "green",
     badge: "SEO Pick",
     affiliateUrl: "YOUR_SURFER_AFFILIATE_LINK",
+    keywords: [
+      "surfer",
+      "seo",
+      "google",
+      "search",
+      "search traffic",
+      "rankings",
+      "content optimization",
+      "website",
+    ],
   },
 
   {
@@ -127,6 +170,17 @@ const tools: Tool[] = [
     accent: "dark",
     badge: "Top Voice AI",
     affiliateUrl: "YOUR_ELEVENLABS_AFFILIATE_LINK",
+    keywords: [
+      "elevenlabs",
+      "eleven labs",
+      "voice",
+      "voice ai",
+      "audio",
+      "speech",
+      "text to speech",
+      "tts",
+      "narration",
+    ],
   },
 
   {
@@ -142,6 +196,16 @@ const tools: Tool[] = [
     accent: "purple",
     badge: "Video Pick",
     affiliateUrl: "YOUR_HEYGEN_AFFILIATE_LINK",
+    keywords: [
+      "heygen",
+      "video",
+      "video ai",
+      "avatar",
+      "ai avatar",
+      "youtube",
+      "presentation",
+      "marketing video",
+    ],
   },
 
   {
@@ -156,6 +220,15 @@ const tools: Tool[] = [
     icon: "P",
     accent: "red",
     affiliateUrl: "YOUR_PICTORY_AFFILIATE_LINK",
+    keywords: [
+      "pictory",
+      "video",
+      "video ai",
+      "article to video",
+      "script to video",
+      "content",
+      "short video",
+    ],
   },
 
   {
@@ -171,6 +244,16 @@ const tools: Tool[] = [
     accent: "pink",
     badge: "Creator Pick",
     affiliateUrl: "YOUR_DESCRIPT_AFFILIATE_LINK",
+    keywords: [
+      "descript",
+      "video",
+      "video editing",
+      "audio",
+      "podcast",
+      "youtube",
+      "transcript",
+      "editing",
+    ],
   },
 
   {
@@ -185,6 +268,16 @@ const tools: Tool[] = [
     icon: "M",
     accent: "teal",
     affiliateUrl: "YOUR_MURF_AFFILIATE_LINK",
+    keywords: [
+      "murf",
+      "voice",
+      "voice ai",
+      "voiceover",
+      "voice over",
+      "audio",
+      "narration",
+      "text to speech",
+    ],
   },
 
   {
@@ -200,11 +293,45 @@ const tools: Tool[] = [
     accent: "indigo",
     badge: "Productivity Pick",
     affiliateUrl: "YOUR_CLICKUP_AFFILIATE_LINK",
+    keywords: [
+      "clickup",
+      "productivity",
+      "tasks",
+      "task management",
+      "projects",
+      "project management",
+      "planning",
+      "business",
+    ],
   },
 ];
 
 function App() {
   const [expandedTool, setExpandedTool] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [hasSearched, setHasSearched] = useState(false);
+
+  const normalizedQuery = searchQuery.trim().toLowerCase();
+
+  const filteredTools = useMemo(() => {
+    if (!normalizedQuery) {
+      return tools;
+    }
+
+    return tools.filter((tool) => {
+      const searchableText = [
+        tool.name,
+        tool.category,
+        tool.description,
+        tool.longDescription,
+        ...tool.keywords,
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      return searchableText.includes(normalizedQuery);
+    });
+  }, [normalizedQuery]);
 
   const openTool = (url: string) => {
     if (!url || url.startsWith("YOUR_")) {
@@ -217,11 +344,6 @@ function App() {
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
-  /*
-    IMPORTANT:
-    Category buttons ONLY scroll to the correct AI tool.
-    They do NOT automatically open the long description.
-  */
   const goToTool = (toolName: string) => {
     const element = document.getElementById(
       `tool-${toolName.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`
@@ -229,10 +351,8 @@ function App() {
 
     if (!element) return;
 
-    // Close any previously opened tool
     setExpandedTool(null);
 
-    // Scroll directly to the correct tool
     element.scrollIntoView({
       behavior: "smooth",
       block: "center",
@@ -244,6 +364,32 @@ function App() {
       behavior: "smooth",
       block: "start",
     });
+  };
+
+  const handleSearch = () => {
+    setHasSearched(true);
+    setExpandedTool(null);
+
+    window.setTimeout(() => {
+      document.getElementById("search-results")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 50);
+  };
+
+  const handleSearchKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
+  };
+
+  const clearSearch = () => {
+    setSearchQuery("");
+    setHasSearched(false);
+    setExpandedTool(null);
   };
 
   return (
@@ -300,11 +446,25 @@ function App() {
 
               <input
                 type="text"
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                onKeyDown={handleSearchKeyDown}
                 placeholder="What do you want AI to help with?"
                 aria-label="Search for an AI tool"
               />
 
-              <button onClick={() => scrollToSection("popular")}>
+              {searchQuery && (
+                <button
+                  type="button"
+                  className="search-clear"
+                  onClick={clearSearch}
+                  aria-label="Clear search"
+                >
+                  ×
+                </button>
+              )}
+
+              <button type="button" onClick={handleSearch}>
                 Find AI
                 <span>→</span>
               </button>
@@ -313,23 +473,73 @@ function App() {
             <div className="popular-searches">
               <span>Popular:</span>
 
-              <button onClick={() => goToTool("Writesonic")}>
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery("writing");
+                  setHasSearched(true);
+                  window.setTimeout(
+                    () => scrollToSection("search-results"),
+                    50
+                  );
+                }}
+              >
                 Writing
               </button>
 
-              <button onClick={() => goToTool("Copy.ai")}>
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery("marketing");
+                  setHasSearched(true);
+                  window.setTimeout(
+                    () => scrollToSection("search-results"),
+                    50
+                  );
+                }}
+              >
                 Marketing
               </button>
 
-              <button onClick={() => goToTool("HeyGen")}>
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery("video");
+                  setHasSearched(true);
+                  window.setTimeout(
+                    () => scrollToSection("search-results"),
+                    50
+                  );
+                }}
+              >
                 Video
               </button>
 
-              <button onClick={() => goToTool("ElevenLabs")}>
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery("voice");
+                  setHasSearched(true);
+                  window.setTimeout(
+                    () => scrollToSection("search-results"),
+                    50
+                  );
+                }}
+              >
                 Voice
               </button>
 
-              <button onClick={() => goToTool("Surfer")}>
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery("seo");
+                  setHasSearched(true);
+                  window.setTimeout(
+                    () => scrollToSection("search-results"),
+                    50
+                  );
+                }}
+              >
                 SEO
               </button>
             </div>
@@ -396,130 +606,160 @@ function App() {
           </div>
         </section>
 
-        {/* AI TOOLS */}
+        {/* SEARCH RESULTS / AI TOOLS */}
 
-        <section className="section tools-section" id="popular">
+        <section
+          className="section tools-section"
+          id="search-results"
+        >
           <div className="section-header">
             <div>
               <span className="section-kicker">
-                EDITOR'S PICKS
+                {hasSearched ? "SEARCH RESULTS" : "EDITOR'S PICKS"}
               </span>
 
-              <h2>AI tools worth knowing</h2>
+              <h2>
+                {hasSearched && normalizedQuery
+                  ? `Results for "${searchQuery.trim()}"`
+                  : "AI tools worth knowing"}
+              </h2>
             </div>
 
             <span className="text-link">
-              10 curated tools
+              {hasSearched
+                ? `${filteredTools.length} ${
+                    filteredTools.length === 1 ? "tool" : "tools"
+                  } found`
+                : "10 curated tools"}
             </span>
           </div>
 
-          <div className="tools-grid">
-            {tools.map((tool) => {
-              const toolId = `tool-${tool.name
-                .toLowerCase()
-                .replace(/[^a-z0-9]+/g, "-")}`;
+          {hasSearched && normalizedQuery && filteredTools.length === 0 ? (
+            <div className="no-results">
+              <div className="no-results-icon">⌕</div>
 
-              const isExpanded =
-                expandedTool === tool.name;
+              <h3>No AI tools found</h3>
 
-              return (
-                <article
-                  className={`tool-card ${
-                    isExpanded ? "expanded" : ""
-                  }`}
-                  key={tool.name}
-                  id={toolId}
-                >
-                  <div className={`tool-logo ${tool.accent}`}>
-                    {tool.icon}
-                  </div>
+              <p>
+                We couldn't find a tool matching "
+                <strong>{searchQuery.trim()}</strong>".
+                Try a different search such as writing, video, voice,
+                marketing or SEO.
+              </p>
 
-                  <div className="tool-top">
-                    {tool.badge && (
-                      <span className="tool-badge">
-                        {tool.badge}
-                      </span>
-                    )}
+              <button
+                type="button"
+                className="no-results-button"
+                onClick={clearSearch}
+              >
+                Show all AI tools
+                <span>→</span>
+              </button>
+            </div>
+          ) : (
+            <div className="tools-grid">
+              {filteredTools.map((tool) => {
+                const toolId = `tool-${tool.name
+                  .toLowerCase()
+                  .replace(/[^a-z0-9]+/g, "-")}`;
 
-                    <span className="rating">
-                      ★ {tool.rating}
-                    </span>
-                  </div>
+                const isExpanded = expandedTool === tool.name;
 
-                  <div className="tool-info">
-                    <span className="tool-category">
-                      {tool.category}
-                    </span>
-
-                    <h3>{tool.name}</h3>
-
-                    <p>{tool.description}</p>
-
-                    {/* BEAUTIFUL READ MORE BUTTON */}
-
-                    <button
-                      type="button"
-                      className={`learn-more-button ${
-                        isExpanded ? "is-open" : ""
-                      }`}
-                      onClick={() =>
-                        setExpandedTool(
-                          isExpanded ? null : tool.name
-                        )
-                      }
-                      aria-expanded={isExpanded}
-                    >
-                      <span>
-                        {isExpanded
-                          ? "Show less"
-                          : "Read more"}
-                      </span>
-
-                      <span className="learn-more-arrow">
-                        {isExpanded ? "↑" : "↓"}
-                      </span>
-                    </button>
-
-                    {/* LONG DESCRIPTION */}
-
-                    {isExpanded && (
-                      <div className="tool-long-description">
-                        {tool.longDescription
-                          .split("\n\n")
-                          .map((paragraph, index) => (
-                            <p key={index}>
-                              {paragraph}
-                            </p>
-                          ))}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="tool-bottom">
-                    <div>
-                      <span className="small-label">
-                        PRICE
-                      </span>
-
-                      <strong>{tool.price}</strong>
+                return (
+                  <article
+                    className={`tool-card ${
+                      isExpanded ? "expanded" : ""
+                    }`}
+                    key={tool.name}
+                    id={toolId}
+                  >
+                    <div className={`tool-logo ${tool.accent}`}>
+                      {tool.icon}
                     </div>
 
-                    <button
-                      type="button"
-                      className="tool-button"
-                      onClick={() =>
-                        openTool(tool.affiliateUrl)
-                      }
-                    >
-                      Try {tool.name}
+                    <div className="tool-top">
+                      {tool.badge && (
+                        <span className="tool-badge">
+                          {tool.badge}
+                        </span>
+                      )}
 
-                      <span>→</span>
-                    </button>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
+                      <span className="rating">
+                        ★ {tool.rating}
+                      </span>
+                    </div>
+
+                    <div className="tool-info">
+                      <span className="tool-category">
+                        {tool.category}
+                      </span>
+
+                      <h3>{tool.name}</h3>
+
+                      <p>{tool.description}</p>
+
+                      <button
+                        type="button"
+                        className={`learn-more-button ${
+                          isExpanded ? "is-open" : ""
+                        }`}
+                        onClick={() =>
+                          setExpandedTool(
+                            isExpanded ? null : tool.name
+                          )
+                        }
+                        aria-expanded={isExpanded}
+                      >
+                        <span>
+                          {isExpanded
+                            ? "Show less"
+                            : "Read more"}
+                        </span>
+
+                        <span className="learn-more-arrow">
+                          {isExpanded ? "↑" : "↓"}
+                        </span>
+                      </button>
+
+                      {isExpanded && (
+                        <div className="tool-long-description">
+                          {tool.longDescription
+                            .split("\n\n")
+                            .map((paragraph, index) => (
+                              <p key={index}>
+                                {paragraph}
+                              </p>
+                            ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="tool-bottom">
+                      <div>
+                        <span className="small-label">
+                          PRICE
+                        </span>
+
+                        <strong>{tool.price}</strong>
+                      </div>
+
+                      <button
+                        type="button"
+                        className="tool-button"
+                        onClick={() =>
+                          openTool(tool.affiliateUrl)
+                        }
+                      >
+                        Try {tool.name}
+
+                        <span>→</span>
+                      </button>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          )}
         </section>
 
         {/* FINDER */}
@@ -551,7 +791,6 @@ function App() {
             </button>
           </div>
 
-          {/* DECORATION */}
           <div className="finder-decoration" aria-hidden="true">
             <div className="finder-orb">
               <span>✦</span>
