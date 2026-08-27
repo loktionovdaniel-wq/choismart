@@ -1,10 +1,11 @@
 import "./index.css";
+import { useState } from "react";
 
 type Tool = {
-  id: string;
   name: string;
   category: string;
   description: string;
+  longDescription: string;
   rating: string;
   price: string;
   icon: string;
@@ -17,48 +18,49 @@ const categories = [
   {
     icon: "✍️",
     title: "Writing",
-    description: "Content, copy & business writing",
-    target: "tool-jasper",
+    description: "Articles, blogs & AI writing",
+    target: "Writesonic",
   },
   {
     icon: "📣",
     title: "Marketing",
     description: "Marketing, SEO & sales",
-    target: "tool-copy-ai",
+    target: "Copy.ai",
   },
   {
     icon: "🎬",
     title: "Video",
     description: "Create & edit videos with AI",
-    target: "tool-heygen",
+    target: "HeyGen",
   },
   {
     icon: "🎙️",
     title: "Voice",
     description: "Voice, audio & speech",
-    target: "tool-elevenlabs",
+    target: "ElevenLabs",
   },
   {
     icon: "🔎",
     title: "SEO",
     description: "Research, rankings & content",
-    target: "tool-surfer",
+    target: "Surfer",
   },
   {
     icon: "⚡",
     title: "Productivity",
     description: "Work faster with AI",
-    target: "tool-clickup",
+    target: "ClickUp",
   },
 ];
 
 const tools: Tool[] = [
   {
-    id: "tool-jasper",
     name: "Jasper",
-    category: "Writing & Marketing AI",
+    category: "Marketing AI",
     description:
-      "If you regularly write posts, ads, emails, website copy or marketing campaigns, Jasper can take a lot of the blank-page work off your shoulders. You give it the idea, audience and tone you want, and it helps turn that rough idea into polished content. It is especially useful for businesses and creators who need to produce a lot of content without spending hours staring at an empty document.",
+      "If you work with advertising or content, Jasper is worth checking out. It can help turn your ideas into ads, emails, social posts and website copy.",
+    longDescription:
+      "Jasper is built for people who spend a lot of time creating marketing content. If you run a business, manage social media or work in marketing, you know how quickly writing can become a full-time job by itself.\n\nYou may already know exactly what you want to say, but turning that idea into a good advertisement, email or social media post takes time. Jasper can help you get past that blank page and create a strong starting point.\n\nYou can use it for advertising copy, social media posts, emails, website content, product messaging, headlines and other marketing tasks.\n\nThe best way to use it is not to let AI replace your own ideas, but to let it handle the first draft while you add your own personality and experience.",
     rating: "4.8",
     price: "Paid",
     icon: "J",
@@ -66,12 +68,14 @@ const tools: Tool[] = [
     badge: "Editor's Pick",
     affiliateUrl: "YOUR_JASPER_AFFILIATE_LINK",
   },
+
   {
-    id: "tool-copy-ai",
     name: "Copy.ai",
-    category: "Marketing & Sales AI",
+    category: "Marketing AI",
     description:
-      "Copy.ai is useful when your work involves selling, promoting or growing something. It can help with marketing ideas, sales emails, product descriptions, social media content and repeatable business workflows. Instead of asking AI the same questions over and over, you can use structured workflows to speed up everyday marketing tasks. It is a good choice when you want AI to become part of your actual business process, not just a chatbot you occasionally open.",
+      "If you sell something online or run a business, this one is worth a look. It can help with marketing, sales and repetitive business work.",
+    longDescription:
+      "Copy.ai is interesting because it goes beyond simply asking an AI to write a paragraph. It is designed around marketing, sales and business workflows.\n\nThink about the small tasks that keep coming back every week: writing outreach messages, preparing marketing material, creating sales content and organizing information. Those little tasks can add up to hours of work.\n\nCopy.ai can help with many of these jobs and can be especially useful when you want repeatable workflows instead of starting from scratch every time.\n\nFor a small business owner, that can be a big advantage. You may not have a full marketing department behind you, so having AI help with routine work can free up time for things that actually need you.",
     rating: "4.7",
     price: "Free / Paid",
     icon: "C",
@@ -79,25 +83,29 @@ const tools: Tool[] = [
     badge: "Popular",
     affiliateUrl: "YOUR_COPY_AI_AFFILIATE_LINK",
   },
+
   {
-    id: "tool-writesonic",
     name: "Writesonic",
     category: "Writing & SEO",
     description:
-      "Writesonic is a strong option if you want to create useful online content without starting everything from scratch. You can use it for articles, website copy, product descriptions, marketing content and SEO-focused writing. It is particularly helpful when you know what you want to say but don't want to spend hours researching, outlining and rewriting the same piece of content. For bloggers, small businesses and people building websites, it can make the entire content process feel much faster.",
+      "Have an idea for an article but don't want to spend hours staring at a blank page? Writesonic can help you turn that idea into real content much faster.",
+    longDescription:
+      "Writesonic is one of the tools I'd look at first if your main goal is writing. It can help with articles, blog posts, website content, marketing copy and SEO-focused content.\n\nImagine you have a topic in mind but don't know where to start. Normally you would need to research the topic, create an outline, decide what to say and then write the entire thing. Writesonic can help you move through several of those steps much faster.\n\nIt can be useful for bloggers, business owners, marketers, website owners and creators who need to publish content regularly.\n\nYou still want to read through the result and make it your own. But instead of starting with an empty document, you can start with something you can actually work with.\n\nIf writing content is taking too much of your time, this is exactly the kind of AI tool worth trying.",
     rating: "4.7",
     price: "Free / Paid",
     icon: "W",
     accent: "orange",
-    badge: "Best for SEO",
+    badge: "Best for Writing",
     affiliateUrl: "YOUR_WRITESONIC_AFFILIATE_LINK",
   },
+
   {
-    id: "tool-surfer",
     name: "Surfer",
     category: "SEO AI",
     description:
-      "If you have a website and actually want people to find it through Google, Surfer is worth looking at. It helps you understand what successful pages are doing and gives you practical guidance for improving your own content. You can use it for keyword research, content planning, optimization and SEO writing. Instead of guessing whether an article is strong enough to compete, Surfer gives you data and recommendations that can help you make smarter decisions.",
+      "If you have a website and want people to actually find it through Google, Surfer is worth knowing. It helps you understand what your content may be missing.",
+    longDescription:
+      "Surfer is made for people who care about search traffic. Writing a good article is one thing, but getting people to discover that article through Google is another challenge.\n\nSurfer helps you understand what is happening around a search topic and gives you information that can help you plan and optimize your content.\n\nThis can be useful for business owners, bloggers, agencies and anyone trying to grow a website without relying completely on paid advertising.\n\nInstead of simply guessing what to write about, you can use data and recommendations to build content around topics people are actually searching for.\n\nIf Google traffic matters to your business, Surfer is definitely worth exploring.",
     rating: "4.8",
     price: "Paid",
     icon: "S",
@@ -105,12 +113,14 @@ const tools: Tool[] = [
     badge: "SEO Pick",
     affiliateUrl: "YOUR_SURFER_AFFILIATE_LINK",
   },
+
   {
-    id: "tool-elevenlabs",
     name: "ElevenLabs",
     category: "Voice AI",
     description:
-      "ElevenLabs is for people who want realistic voice audio without having to record everything themselves. You can turn written scripts into natural-sounding narration for videos, advertisements, presentations, podcasts and other projects. It supports many languages and different voices, making it useful when you need professional-sounding audio but don't have a voice actor or recording studio available. For creators, businesses and video makers, this can save a surprising amount of time.",
+      "Want a voice for your video without recording everything yourself? ElevenLabs can turn your script into natural-sounding narration.",
+    longDescription:
+      "ElevenLabs focuses on AI-generated voices, and this is one of those tools that makes more sense once you actually hear what it can do.\n\nInstead of recording your own voice every time you need narration, you can turn written text into spoken audio.\n\nThat can be useful for YouTube videos, social media clips, advertisements, presentations, educational content and many other projects.\n\nThe voices can sound much more natural than the robotic text-to-speech systems people remember from years ago. You can work with different voices and languages depending on your project.\n\nIf you make videos but don't always want to be behind the microphone, this can save a lot of time.",
     rating: "4.9",
     price: "Free / Paid",
     icon: "11",
@@ -118,12 +128,14 @@ const tools: Tool[] = [
     badge: "Top Voice AI",
     affiliateUrl: "YOUR_ELEVENLABS_AFFILIATE_LINK",
   },
+
   {
-    id: "tool-heygen",
     name: "HeyGen",
     category: "Video AI",
     description:
-      "HeyGen is useful when you want to make professional-looking videos but don't want to stand in front of a camera every time. You can create videos with AI avatars, presenters, scripts and voiceovers, which makes it useful for marketing, training, education, product demonstrations and social media. It can be especially valuable for businesses that need to create lots of video content quickly without hiring a full production team.",
+      "Need a video but don't feel like getting in front of a camera? HeyGen lets you create videos using AI avatars and your own script.",
+    longDescription:
+      "HeyGen is interesting for one simple reason: you can create certain types of videos without setting up a camera, lights and microphone every time.\n\nYou provide the script and choose how you want the video to look, and the platform can generate a video using an AI avatar.\n\nThis can be useful for presentations, training videos, marketing content, product explanations and social media.\n\nIt is also useful for creators who want to experiment with video but are not comfortable being on camera.\n\nIt will not replace every type of professional video production, but for the right kind of content it can make the process dramatically easier.",
     rating: "4.8",
     price: "Free / Paid",
     icon: "H",
@@ -131,24 +143,28 @@ const tools: Tool[] = [
     badge: "Video Pick",
     affiliateUrl: "YOUR_HEYGEN_AFFILIATE_LINK",
   },
+
   {
-    id: "tool-pictory",
     name: "Pictory",
     category: "Video AI",
     description:
-      "Pictory is a great starting point if you already have words but need to turn them into video. You can use scripts, articles or ideas as the foundation for creating videos with AI. This makes it useful for social media creators, marketers, educators and businesses that want to turn written content into something people can watch. Instead of learning complicated video-editing software, you can let AI handle much of the initial production work.",
+      "Have an article, script or idea that you wish was a video? Pictory is built around turning written content into engaging videos.",
+    longDescription:
+      "Pictory is aimed at people who already have content but want to turn that content into video.\n\nMaybe you have a blog post, a script, a presentation or simply an idea. Instead of building the entire video manually from scratch, Pictory can help transform written material into a video format.\n\nThat can be particularly useful for marketers and creators who need to produce a lot of short-form content.\n\nOne piece of written content can become another format without you having to rebuild everything from zero.\n\nIf you want to post more video but editing is the part that keeps stopping you, Pictory is worth exploring.",
     rating: "4.6",
     price: "Paid",
     icon: "P",
     accent: "red",
     affiliateUrl: "YOUR_PICTORY_AFFILIATE_LINK",
   },
+
   {
-    id: "tool-descript",
     name: "Descript",
     category: "Video & Audio",
     description:
-      "Descript takes a different approach to video and audio editing: you can edit your media almost like you are editing a document. That means you can work with a transcript, remove sections of speech, clean up audio and make changes without dealing with a complicated traditional timeline every time. It is especially useful for podcasts, interviews, YouTube videos and creators who spend a lot of time editing spoken content.",
+      "Video editing can be a pain. Descript takes a different approach: your video becomes a document, so editing the words can also edit the video.",
+    longDescription:
+      "Descript is one of those tools that makes the most sense once you see the workflow.\n\nInstead of treating your video as a complicated timeline full of tiny clips, it lets you work with a transcript that looks much more like a normal document.\n\nIf you recorded an interview and someone said something you want to remove, for example, you can edit the transcript instead of searching through the entire video timeline.\n\nIt can be useful for podcasts, YouTube videos, interviews, social media clips, tutorials and other talking-based content.\n\nIf traditional video editing feels unnecessarily complicated, Descript is definitely worth trying.",
     rating: "4.7",
     price: "Free / Paid",
     icon: "D",
@@ -156,24 +172,28 @@ const tools: Tool[] = [
     badge: "Creator Pick",
     affiliateUrl: "YOUR_DESCRIPT_AFFILIATE_LINK",
   },
+
   {
-    id: "tool-murf",
     name: "Murf",
     category: "Voice AI",
     description:
-      "Murf is designed for people who need clean, professional voiceovers without recording them manually. It can be useful for presentations, advertisements, training videos, product videos, online courses and business content. You can start with your script and choose a voice that fits the feeling you want. If recording your own voice takes too much time or you simply don't like how it sounds on a microphone, this gives you another way to produce polished narration.",
+      "Need a professional voiceover but don't have a voice actor or recording setup? Murf can help turn your script into polished narration.",
+    longDescription:
+      "Murf is an AI voice platform designed for people creating professional-looking content such as presentations, advertisements, training material and videos.\n\nInstead of recording every sentence yourself or hiring a voice actor for every small project, you can start with your written script and create a voiceover using AI.\n\nThis can be especially useful when you need to make changes. If you recorded an entire video yourself and later changed one sentence, you normally have to record that sentence again.\n\nWith an AI voice workflow, changing the script can be much simpler.\n\nIf voiceovers are something you need but recording them yourself is slowing you down, Murf is worth taking a look at.",
     rating: "4.7",
     price: "Free / Paid",
     icon: "M",
     accent: "teal",
     affiliateUrl: "YOUR_MURF_AFFILIATE_LINK",
   },
+
   {
-    id: "tool-clickup",
     name: "ClickUp",
     category: "Productivity AI",
     description:
-      "ClickUp is for people who have too many things to keep track of. Projects, tasks, deadlines, notes and team communication can all live in one place, while its AI features can help with writing, summarizing information and organizing work. It is useful for freelancers, business owners and teams who are tired of having tasks scattered across messages, notes and different apps. The goal is simple: spend less time organizing your work and more time actually doing it.",
+      "If your work is spread across notes, tasks and endless to-do lists, ClickUp is worth checking out. It puts a lot of that work in one place.",
+    longDescription:
+      "ClickUp is built around organizing work, projects and tasks, with AI features added into that workflow.\n\nIt can be useful if you constantly have information scattered across different apps and struggle to keep track of what needs to happen next.\n\nYou can use it for projects, tasks, documents, team collaboration and planning. AI features can help with writing, summarizing information and working with the content inside your workspace.\n\nFor a small business, having everything in one place can make a big difference.\n\nIf your current system feels messy and you are managing multiple projects, ClickUp is worth exploring.",
     rating: "4.8",
     price: "Free / Paid",
     icon: "✓",
@@ -183,27 +203,35 @@ const tools: Tool[] = [
   },
 ];
 
-function scrollToTool(id: string) {
-  const element = document.getElementById(id);
-
-  if (element) {
-    element.scrollIntoView({
-      behavior: "smooth",
-      block: "center",
-    });
-  }
-}
-
 function App() {
+  const [expandedTool, setExpandedTool] = useState<string | null>(null);
+
   const openTool = (url: string) => {
     if (!url || url.startsWith("YOUR_")) {
       window.alert(
-        "This partner link has not been connected yet. We are adding the affiliate link soon."
+        "The partner link for this tool has not been connected yet."
       );
       return;
     }
 
     window.open(url, "_blank", "noopener,noreferrer");
+  };
+
+  const goToTool = (toolName: string) => {
+    const element = document.getElementById(
+      `tool-${toolName.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`
+    );
+
+    if (!element) return;
+
+    element.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+
+    setTimeout(() => {
+      setExpandedTool(toolName);
+    }, 400);
   };
 
   return (
@@ -223,25 +251,18 @@ function App() {
 
           <nav className="desktop-nav">
             <a href="#explore">Explore AI</a>
-
             <a href="#categories">Categories</a>
-
             <a href="#popular">Popular</a>
           </nav>
 
-          <button
-            className="nav-button"
-            onClick={() => scrollToTool("tool-jasper")}
-          >
+          <a className="nav-button" href="#popular">
             Explore AI
             <span>→</span>
-          </button>
+          </a>
         </div>
       </header>
 
       <main>
-        {/* HERO */}
-
         <section className="hero" id="explore">
           <div className="hero-content">
             <div className="eyebrow">
@@ -269,7 +290,13 @@ function App() {
                 aria-label="Search for an AI tool"
               />
 
-              <button onClick={() => scrollToTool("tool-jasper")}>
+              <button
+                onClick={() =>
+                  document
+                    .getElementById("popular")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
+              >
                 Find AI
                 <span>→</span>
               </button>
@@ -277,26 +304,11 @@ function App() {
 
             <div className="popular-searches">
               <span>Popular:</span>
-
-              <button onClick={() => scrollToTool("tool-jasper")}>
-                Writing
-              </button>
-
-              <button onClick={() => scrollToTool("tool-copy-ai")}>
-                Marketing
-              </button>
-
-              <button onClick={() => scrollToTool("tool-heygen")}>
-                Video
-              </button>
-
-              <button onClick={() => scrollToTool("tool-elevenlabs")}>
-                Voice
-              </button>
-
-              <button onClick={() => scrollToTool("tool-surfer")}>
-                SEO
-              </button>
+              <a href="#popular">Writing</a>
+              <a href="#popular">Marketing</a>
+              <a href="#popular">Video</a>
+              <a href="#popular">Voice</a>
+              <a href="#popular">SEO</a>
             </div>
           </div>
 
@@ -322,8 +334,6 @@ function App() {
           </div>
         </section>
 
-        {/* CATEGORIES */}
-
         <section className="section" id="categories">
           <div className="section-header">
             <div>
@@ -333,8 +343,7 @@ function App() {
             </div>
 
             <p>
-              Pick a category and we'll take you straight to the tools that
-              actually fit it.
+              Pick a category and discover AI tools built for the job.
             </p>
           </div>
 
@@ -343,7 +352,7 @@ function App() {
               <button
                 className="category-card"
                 key={category.title}
-                onClick={() => scrollToTool(category.target)}
+                onClick={() => goToTool(category.target)}
               >
                 <div className="category-icon">{category.icon}</div>
 
@@ -359,8 +368,6 @@ function App() {
           </div>
         </section>
 
-        {/* TOOLS */}
-
         <section className="section tools-section" id="popular">
           <div className="section-header">
             <div>
@@ -373,59 +380,99 @@ function App() {
           </div>
 
           <div className="tools-grid">
-            {tools.map((tool) => (
-              <article
-                className="tool-card"
-                id={tool.id}
-                key={tool.name}
-              >
-                <div className={`tool-logo ${tool.accent}`}>
-                  {tool.icon}
-                </div>
+            {tools.map((tool) => {
+              const toolId = `tool-${tool.name
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, "-")}`;
 
-                <div className="tool-top">
-                  {tool.badge && (
-                    <span className="tool-badge">
-                      {tool.badge}
-                    </span>
-                  )}
+              const isExpanded = expandedTool === tool.name;
 
-                  <span className="rating">
-                    ★ {tool.rating}
-                  </span>
-                </div>
-
-                <div className="tool-info">
-                  <span className="tool-category">
-                    {tool.category}
-                  </span>
-
-                  <h3>{tool.name}</h3>
-
-                  <p>{tool.description}</p>
-                </div>
-
-                <div className="tool-bottom">
-                  <div>
-                    <span className="small-label">PRICE</span>
-
-                    <strong>{tool.price}</strong>
+              return (
+                <article
+                  className={`tool-card ${
+                    isExpanded ? "expanded" : ""
+                  }`}
+                  key={tool.name}
+                  id={toolId}
+                >
+                  <div className={`tool-logo ${tool.accent}`}>
+                    {tool.icon}
                   </div>
 
-                  <button
-                    className="tool-button"
-                    onClick={() => openTool(tool.affiliateUrl)}
-                  >
-                    Explore
-                    <span>→</span>
-                  </button>
-                </div>
-              </article>
-            ))}
+                  <div className="tool-top">
+                    {tool.badge && (
+                      <span className="tool-badge">
+                        {tool.badge}
+                      </span>
+                    )}
+
+                    <span className="rating">
+                      ★ {tool.rating}
+                    </span>
+                  </div>
+
+                  <div className="tool-info">
+                    <span className="tool-category">
+                      {tool.category}
+                    </span>
+
+                    <h3>{tool.name}</h3>
+
+                    <p>{tool.description}</p>
+
+                    <button
+                      className="learn-more-button"
+                      onClick={() =>
+                        setExpandedTool(
+                          isExpanded ? null : tool.name
+                        )
+                      }
+                    >
+                      {isExpanded ? "Show less" : "Learn more"}
+
+                      <span>
+                        {isExpanded ? "↑" : "↓"}
+                      </span>
+                    </button>
+
+                    {isExpanded && (
+                      <div className="tool-long-description">
+                        {tool.longDescription
+                          .split("\n\n")
+                          .map((paragraph, index) => (
+                            <p key={index}>
+                              {paragraph}
+                            </p>
+                          ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="tool-bottom">
+                    <div>
+                      <span className="small-label">
+                        PRICE
+                      </span>
+
+                      <strong>{tool.price}</strong>
+                    </div>
+
+                    <button
+                      className="tool-button"
+                      onClick={() =>
+                        openTool(tool.affiliateUrl)
+                      }
+                    >
+                      Try {tool.name}
+
+                      <span>→</span>
+                    </button>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </section>
-
-        {/* FINDER */}
 
         <section className="finder-section">
           <div className="finder-content">
@@ -440,31 +487,43 @@ function App() {
             </h2>
 
             <p>
-              Not sure which AI is right for you? Start with the category
-              that matches what you're trying to accomplish. We've picked
-              tools that can save you time instead of making your search
-              even more complicated.
+              We are building a simple AI finder that will help
+              you discover the best tool for your specific goal.
             </p>
 
             <button
               className="finder-button"
-              onClick={() => scrollToTool("tool-jasper")}
+              onClick={() =>
+                document
+                  .getElementById("popular")
+                  ?.scrollIntoView({
+                    behavior: "smooth",
+                  })
+              }
             >
               Explore AI tools
               <span>→</span>
             </button>
           </div>
 
-          {/* Чистая декорация — без карточек, которые накладывались на текст */}
-
           <div className="finder-decoration">
+            <div className="floating-card card-one">
+              <span>✍️</span>
+              Writing
+              <strong>Top tools</strong>
+            </div>
+
+            <div className="floating-card card-two">
+              <span>🎬</span>
+              Video
+              <strong>Top tools</strong>
+            </div>
+
             <div className="finder-orb">
               <span>✦</span>
             </div>
           </div>
         </section>
-
-        {/* WHY CHOISMART */}
 
         <section className="section why-section">
           <div className="section-header centered">
@@ -486,8 +545,8 @@ function App() {
               <h3>Less noise</h3>
 
               <p>
-                No endless lists of random AI products. We focus on tools
-                that solve real problems.
+                No endless lists of random AI products. We focus
+                on tools that solve real problems.
               </p>
             </div>
 
@@ -497,8 +556,8 @@ function App() {
               <h3>Clear choices</h3>
 
               <p>
-                See what each tool does, who it is for and whether it fits
-                your needs.
+                See what each tool does, who it is for and whether
+                it fits your needs.
               </p>
             </div>
 
@@ -508,14 +567,13 @@ function App() {
               <h3>Choose smarter</h3>
 
               <p>
-                Spend less time searching and more time actually using AI.
+                Spend less time searching and more time actually
+                using AI.
               </p>
             </div>
           </div>
         </section>
       </main>
-
-      {/* FOOTER */}
 
       <footer className="footer">
         <div className="footer-inner">
@@ -524,7 +582,9 @@ function App() {
               <span className="brand-mark">C</span>
 
               <span>
-                Choi<span className="brand-highlight">Smart</span>
+                Choi<span className="brand-highlight">
+                  Smart
+                </span>
               </span>
             </a>
 
@@ -534,17 +594,11 @@ function App() {
           </div>
 
           <div className="footer-links">
-            <button onClick={() => scrollToTool("tool-jasper")}>
-              Explore AI
-            </button>
+            <a href="#explore">Explore AI</a>
 
-            <a href="#categories">
-              Categories
-            </a>
+            <a href="#categories">Categories</a>
 
-            <a href="#popular">
-              AI Tools
-            </a>
+            <a href="#popular">AI Tools</a>
           </div>
         </div>
 
